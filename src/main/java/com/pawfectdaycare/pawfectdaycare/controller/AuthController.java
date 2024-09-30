@@ -25,7 +25,7 @@ import java.util.Map;
 @CrossOrigin
 @RequestMapping("/api/auth")
 public class AuthController {
-    //erwewrrr
+
 
     @Autowired
     private AuthenticationManager authenticationManager;
