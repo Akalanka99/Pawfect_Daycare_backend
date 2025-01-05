@@ -8,11 +8,11 @@
 		<version>3.3.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.heavenlylanka</groupId>
-	<artifactId>heavenlylanka</artifactId>
+	<groupId>com.pawfectdaycare</groupId>
+	<artifactId>pawfectdaycare</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>heavenlylanka</name>
-	<description>Project for Heavenly Lanka Vacations</description>
+	<name>pawfectdaycare</name>
+	<description>Project for Pawfectdaycare</description>
 	<url/>
 	<licenses>
 		<license/>
