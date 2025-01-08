@@ -16,7 +16,7 @@ public class BookingDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate date; // For single-day bookings
+//    private LocalDate date; // For single-day bookings
     private LocalDate startDate; // For multi-day bookings
     private LocalDate endDate; // For multi-day bookings
     private boolean isHalfDay;
@@ -27,9 +27,9 @@ public class BookingDetails {
     public BookingDetails() {}
 
     // Constructor with parameters
-    public BookingDetails(LocalDate date, LocalDate startDate, LocalDate endDate, boolean isHalfDay,
+    public BookingDetails( LocalDate startDate, LocalDate endDate, boolean isHalfDay,
                           boolean isMultipleDay, String time) {
-        this.date = date;
+//        this.date = date;
         this.startDate = startDate;
         this.endDate = endDate;
         this.isHalfDay = isHalfDay;

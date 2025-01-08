@@ -3,6 +3,10 @@ package com.pawfectdaycare.pawfectdaycare.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import java.util.List;
+import java.util.ArrayList;
+
+
 
 import java.time.LocalDate;
 
@@ -30,7 +34,11 @@ public class Reservation {
     @JoinColumn(name = "booking_details_id", referencedColumnName = "id")
     private BookingDetails bookingDetails;
 
-    private String additionalCareDetails;
+    @OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CageBooking> cageBookings = new ArrayList<>();
+
+
+
 
     // Default constructor for JPA
     public Reservation() {}
@@ -38,7 +46,7 @@ public class Reservation {
     // Constructor with parameters
     public Reservation(String ownerName, String email, String homeAddress, String phoneNumber,
                        String emergencyContact, String petCategory, String petName, String petBreed, String age,
-                       BookingDetails bookingDetails, String additionalCareDetails) {
+                       BookingDetails bookingDetails) {
         this.ownerName = ownerName;
         this.email = email;
         this.homeAddress = homeAddress;
@@ -49,6 +57,6 @@ public class Reservation {
         this.petBreed = petBreed;
         this.Age = age;
         this.bookingDetails = bookingDetails;
-        this.additionalCareDetails = additionalCareDetails;
+
     }
 }
