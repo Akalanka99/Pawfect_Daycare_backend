@@ -19,7 +19,10 @@ public class ReservationController {
 
     @PostMapping
     public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) {
+
+
         Reservation createdReservation = reservationService.saveReservation(reservation);
+        System.out.println("Reservation data is"+ createdReservation);
         return ResponseEntity.ok(createdReservation);
     }
 
