@@ -1,9 +1,9 @@
 package com.pawfectdaycare.pawfectdaycare.repository;
 
-import com.pawfectdaycare.pawfectdaycare.entity.Reservation;
+import com.pawfectdaycare.pawfectdaycare.entity.CageBooking;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-
-public interface ReservationRepository extends JpaRepository<Reservation, Long> {
+@Repository
+public interface CageBookingRepository extends JpaRepository<CageBooking, Long> {
 }
