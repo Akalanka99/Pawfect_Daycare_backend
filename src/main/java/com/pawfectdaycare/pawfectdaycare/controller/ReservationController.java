@@ -19,16 +19,14 @@ public class ReservationController {
 
     @PostMapping
     public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) {
-
-
+        // Save the reservation along with its associated CageBooking entities
         Reservation createdReservation = reservationService.saveReservation(reservation);
-        System.out.println("Reservation data is"+ createdReservation);
-        return ResponseEntity.ok(createdReservation);
+
+        System.out.println("Saved Reservation Data: " + createdReservation);
+
+        // Return the saved reservation in the response
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdReservation);
     }
 
-    @GetMapping
-    public ResponseEntity<List<Reservation>> getAllReservations() {
-        List<Reservation> reservations = reservationService.findAll();
-        return ResponseEntity.ok(reservations);
-    }
+
 }
