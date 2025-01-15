@@ -19,21 +19,8 @@ public class BookingDetails {
 //    private LocalDate date; // For single-day bookings
     private LocalDate startDate; // For multi-day bookings
     private LocalDate endDate; // For multi-day bookings
-    private boolean isHalfDay;
-    private boolean isMultipleDay;
-    private String time; // Optional: if you need specific time information
+    private boolean singleDay;
+    private boolean multipleDay;
 
-    // Default constructor for JPA
-    public BookingDetails() {}
 
-    // Constructor with parameters
-    public BookingDetails( LocalDate startDate, LocalDate endDate, boolean isHalfDay,
-                          boolean isMultipleDay, String time) {
-//        this.date = date;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.isHalfDay = isHalfDay;
-        this.isMultipleDay = isMultipleDay;
-        this.time = time;
-    }
 }
