@@ -1,91 +1,56 @@
 package com.pawfectdaycare.pawfectdaycare.controller;
 
-import com.pawfectdaycare.pawfectdaycare.dto.LoginRequest;
-import com.pawfectdaycare.pawfectdaycare.dto.LoginResponse;
-import com.pawfectdaycare.pawfectdaycare.dto.RegisterRequest;
+import com.google.firebase.auth.FirebaseToken;
 import com.pawfectdaycare.pawfectdaycare.entity.User;
 import com.pawfectdaycare.pawfectdaycare.repository.UserRepository;
-import com.pawfectdaycare.pawfectdaycare.service.UserService;
-import com.pawfectdaycare.pawfectdaycare.security.JwtTokenUtil;
+import com.pawfectdaycare.pawfectdaycare.service.FirebaseService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@CrossOrigin
-@RequestMapping("/api/auth")
+@RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:5173") // ✅ Allow frontend access
 public class AuthController {
 
-
     @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private UserService userService;
+    private FirebaseService firebaseService;
 
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+    @PostMapping("/verify-token")
+    public Map<String, String> verifyToken(@RequestBody Map<String, String> request) {
+        String idToken = request.get("token");
+        Map<String, String> response = new HashMap<>();
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
-            );
+            FirebaseToken decodedToken = firebaseService.verifyToken(idToken);
+            String uid = decodedToken.getUid();
+            String email = decodedToken.getEmail();
+            String displayName = decodedToken.getName();
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            String jwtToken = jwtTokenUtil.generateToken(userDetails);
+            System.out.println("haaaaaaaa"+uid+ email+ displayName);
 
-            return ResponseEntity.ok(new LoginResponse(jwtToken));
-        } catch (BadCredentialsException e) {
-            // Handle invalid credentials
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+            // Check if user already exists
+            User user = userRepository.findByUid(uid);
+            if (user == null) {
+                /////////////////////////////////////////////////////lllllllllooookkk
+                user = new User(uid, displayName, email);
+                userRepository.save(user);
+            }
+
+            response.put("status", "success");
+            response.put("uid", uid);
+            response.put("email", email);
+            response.put("displayName", displayName);
         } catch (Exception e) {
-            // Handle other exceptions
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
-        }
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
-        if (userRepository.findByEmail(registerRequest.getEmail()).isPresent()) {
-            return ResponseEntity.badRequest().body("User already exists");
-        }
-        userService.registerUser(registerRequest);
-        return ResponseEntity.ok("User registered successfully");
-    }
-
-    @GetMapping("/profile")
-    public ResponseEntity<?> getProfile(Authentication authentication) {
-        if (authentication == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+            response.put("status", "error");
+            response.put("message", e.getMessage());
         }
 
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User user = userRepository.findByEmail(userDetails.getUsername()).orElse(null);
-
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
-        }
-
-        Map<String, Object> profile = new HashMap<>();
-        profile.put("email", user.getEmail());
-        profile.put("name", user.getName());
-
-        return ResponseEntity.ok(profile);
+        return response;
     }
 }
