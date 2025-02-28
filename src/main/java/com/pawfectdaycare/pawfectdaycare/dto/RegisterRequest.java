@@ -1,9 +1,13 @@
 package com.pawfectdaycare.pawfectdaycare.dto;
 
+import com.pawfectdaycare.pawfectdaycare.entity.Role;
+
 public class RegisterRequest {
     private String name;
     private String email;
     private String password;
+
+    private Role role;
 
     // Getters and Setters
 
@@ -29,4 +33,6 @@ public class RegisterRequest {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public Role getRole() {return role; }
 }
