@@ -12,6 +12,7 @@ import com.pawfectdaycare.pawfectdaycare.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -58,7 +59,34 @@ public class AuthController {
             response.put("displayName", displayName);
     @Autowired
     private PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
+    @PostMapping("/verify-token")
+    public Map<String, String> verifyToken(@RequestBody Map<String, String> request) {
+        String idToken = request.get("token");
+        Map<String, String> response = new HashMap<>();
+
+        try {
+            FirebaseToken decodedToken = firebaseService.verifyToken(idToken);
+            String uid = decodedToken.getUid();
+            String email = decodedToken.getEmail();
+            String displayName = decodedToken.getName();
+
+            System.out.println("haaaaaaaa"+uid+ email+ displayName);
+
+            // Check if user already exists
+            User user = userRepository.findByUid(uid);
+            if (user == null) {
+                /////////////////////////////////////////////////////lllllllllooookkk
+                user = new User(uid, displayName, email, passwordEncoder.encode(displayName),Role.USER);
+                userRepository.save(user);
+            }
+
+            response.put("status", "success");
+            response.put("uid", uid);
+            response.put("email", email);
+            response.put("displayName", displayName);
+            response.put("role", user.getRole().toString());
     @PostMapping("/verify-token")
     public Map<String, String> verifyToken(@RequestBody Map<String, String> request) {
         String idToken = request.get("token");
@@ -95,6 +123,8 @@ public class AuthController {
         return response;
         return response;
     }
+
+
 
 
 }

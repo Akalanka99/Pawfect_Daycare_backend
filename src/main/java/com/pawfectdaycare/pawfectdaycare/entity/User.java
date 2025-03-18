@@ -22,14 +22,30 @@ public class User {
     private Role role;
 
     // Constructors
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    // Constructors
     public User() {}
 
+    // Constructor with uid
+    public User(String uid, String name, String email, String password, Role role) {
+        this.uid = uid;
     // Constructor with uid
     public User(String uid, String name, String email, String password, Role role) {
         this.uid = uid;
         this.name = name;
         this.email = email;
         this.password = password;
+        this.role = role;
+    }
+
+    // Constructor without uid (for manual user registration)
+    public User(String name, String email, String password, Role role) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.role = role;
         this.role = role;
     }
 
@@ -91,6 +107,10 @@ public class User {
     public void setPassword(String password) {  // Add setter for password
         this.password = password;
     }
+
+    public Role getRole() { return role; }
+
+    public void setRole(Role role) { this.role = role; }
 
     public Role getRole() { return role; }
 
