@@ -60,4 +60,22 @@ public class AuthController {
 
         return response;
     }
+    // ✅ Get User Profile by UID
+    @GetMapping("/user/{uid}")
+    public ResponseEntity<?> getUserProfile(@PathVariable String uid) {
+        try {
+            User user = userRepository.findByUid(uid);
+            if (user != null) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("name", user.getName());
+                response.put("email", user.getEmail());
+                response.put("role", user.getRole().toString());
+                return ResponseEntity.ok(response);
+            } else {
+                return ResponseEntity.status(404).body("User not found");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("An error occurred: " + e.getMessage());
+        }
+    }
 }
