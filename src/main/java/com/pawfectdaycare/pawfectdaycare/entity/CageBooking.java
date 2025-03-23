@@ -24,14 +24,15 @@ public class CageBooking {
     private Long cageId;
     private boolean morning;
     private boolean afternoon;
+    private LocalDate bookingDate;
 
     public CageBooking() {}
 
-    public CageBooking(Long cageId, boolean morning, boolean afternoon) {
+    public CageBooking(Long cageId, boolean morning, boolean afternoon,LocalDate bookingDate) {
         this.cageId = cageId;
         this.morning = morning;
         this.afternoon = afternoon;
+        this.bookingDate = bookingDate;
     }
-
 
 }

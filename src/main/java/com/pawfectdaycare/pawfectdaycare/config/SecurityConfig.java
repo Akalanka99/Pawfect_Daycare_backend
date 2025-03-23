@@ -41,7 +41,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/auth/**","/api/reservations","/api/reservations/cage/{id}","/api/verify-token","/api/user/{uid}").permitAll()
+                        .requestMatchers("/api/auth/**","/api/reservations","/api/reservations/cage/{id}","/api/verify-token","/api/user/{uid}","/api/cage-bookings/**",
+                                "/api/product/**").permitAll()
+                        .anyRequest().authenticated()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
