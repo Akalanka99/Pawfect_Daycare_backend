@@ -42,8 +42,7 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/auth/**","/api/reservations","/api/reservations/cage/{id}","/api/verify-token","/api/user/{uid}","/api/cage-bookings/**",
-                                "/api/product/**").permitAll()
-                        .anyRequest().authenticated()
+                                "/api/product/**","/api/users/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
