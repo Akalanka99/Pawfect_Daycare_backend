@@ -31,4 +31,18 @@ public class CageBookingController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         return ResponseEntity.ok(cageBookingService.getCageAvailabilityForDateRange(startDate, endDate));
     }
+
+    // Fetch all bookings
+    @GetMapping
+    public List<CageBooking> getAllBookings() {
+        return cageBookingService.getAllBookings();
+    }
+
+    // Fetch bookings by date
+    @GetMapping("/date/{date}")
+    public List<CageBooking> getBookingsByDate(@PathVariable String date) {
+        LocalDate parsedDate = LocalDate.parse(date);
+        return cageBookingService.getBookingsByDate(parsedDate);
+    }
+
 }
