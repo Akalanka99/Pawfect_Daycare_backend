@@ -65,4 +65,11 @@ public class CageBookingService {
 
         return result;
     }
+    public List<CageBooking> getAllBookings() {
+        return cageBookingRepository.findAll();
+    }
+
+    public List<CageBooking> getBookingsByDate(LocalDate date) {
+        return cageBookingRepository.findByBookingDate(date);
+    }
 }
