@@ -45,4 +45,11 @@ public class CageBookingController {
         return cageBookingService.getBookingsByDate(parsedDate);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCageBooking(@PathVariable Long id) {
+        cageBookingService.deleteCageBooking(id); // Use the instance, not the class name
+        return ResponseEntity.noContent().build();
+    }
+
+
 }

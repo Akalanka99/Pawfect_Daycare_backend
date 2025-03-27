@@ -72,4 +72,9 @@ public class CageBookingService {
     public List<CageBooking> getBookingsByDate(LocalDate date) {
         return cageBookingRepository.findByBookingDate(date);
     }
+
+    public void deleteCageBooking(Long id) {
+        cageBookingRepository.deleteById(id); // Use the instance, not the class name
+    }
+
 }
