@@ -42,7 +42,7 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/auth/**","/api/reservations","/api/reservations/cage/{id}","/api/verify-token","/api/user/{uid}","/api/cage-bookings/**",
-                                "/api/product/**","/api/users/**","/api/cage-bookings/date/{date}").permitAll()
+                                "/api/product/**","/api/users/**","/api/cage-bookings/date/{date}", "/api/messages/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
