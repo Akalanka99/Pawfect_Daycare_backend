@@ -17,6 +17,8 @@ public class MessageController {
 
     @PostMapping("/sendmessage")
     public ResponseEntity<?> submitMessage(@RequestBody Message message) {
+        System.out.println("Email: ***************************************************************************************************************************************************" + message);
+        System.out.println("Message: " + message);
         try {
             // Save the message
             Message savedMessage = messageService.saveMessage(message);
@@ -29,16 +31,22 @@ public class MessageController {
 
     @GetMapping("/getmessages")
     public ResponseEntity<List<Message>> getAllMessages() {
+        System.out.println("Email: ***************************************************************************************************************************************************" );
+
         return ResponseEntity.ok(messageService.getAllMessages());
     }
 
     @GetMapping("/unread")
     public ResponseEntity<List<Message>> getUnreadMessages() {
+        System.out.println("Email: ***************************************************************************************************************************************************");
+
         return ResponseEntity.ok(messageService.getUnreadMessages());
     }
 
     @PutMapping("/{id}/read")
     public ResponseEntity<Message> markMessageAsRead(@PathVariable Long id) {
+        System.out.println("Email: ***************************************************************************************************************************************************" );
+
         return messageService.markMessageAsRead(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
