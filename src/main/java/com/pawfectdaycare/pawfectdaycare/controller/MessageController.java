@@ -1,6 +1,8 @@
 package com.pawfectdaycare.pawfectdaycare.controller;
 
+import com.pawfectdaycare.pawfectdaycare.dto.EmailReplyRequest;
 import com.pawfectdaycare.pawfectdaycare.entity.Message;
+import com.pawfectdaycare.pawfectdaycare.service.EmailService;
 import com.pawfectdaycare.pawfectdaycare.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,15 +12,17 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/messages")
-@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5173"}, allowedHeaders = "*")
+@CrossOrigin(origins = { "http://localhost:3000", "http://localhost:5173" }, allowedHeaders = "*")
 public class MessageController {
     @Autowired
     private MessageService messageService;
 
+    @Autowired
+    private EmailService emailService;
+
     @PostMapping("/sendmessage")
     public ResponseEntity<?> submitMessage(@RequestBody Message message) {
-        System.out.println("Email: ***************************************************************************************************************************************************" + message);
-        System.out.println("Message: " + message);
+
         try {
             // Save the message
             Message savedMessage = messageService.saveMessage(message);
@@ -28,27 +32,37 @@ public class MessageController {
         }
     }
 
-
     @GetMapping("/getmessages")
     public ResponseEntity<List<Message>> getAllMessages() {
-        System.out.println("Email: ***************************************************************************************************************************************************" );
 
         return ResponseEntity.ok(messageService.getAllMessages());
     }
 
     @GetMapping("/unread")
     public ResponseEntity<List<Message>> getUnreadMessages() {
-        System.out.println("Email: ***************************************************************************************************************************************************");
 
         return ResponseEntity.ok(messageService.getUnreadMessages());
     }
 
     @PutMapping("/{id}/read")
     public ResponseEntity<Message> markMessageAsRead(@PathVariable Long id) {
-        System.out.println("Email: ***************************************************************************************************************************************************" );
 
         return messageService.markMessageAsRead(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/reply")
+    public ResponseEntity<?> sendEmailReply(@RequestBody EmailReplyRequest emailReplyRequest) {
+
+        try {
+            String subject = "Reply from Pawfect Daycare";
+            String body = "Thank you for reaching out to us.:\n\n" + emailReplyRequest.getMessage();
+
+            emailService.sendEmail(emailReplyRequest.getEmail(), subject, body);
+            return ResponseEntity.ok("Email sent successfully to " + emailReplyRequest.getEmail());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error sending email: " + e.getMessage());
+        }
     }
 }
